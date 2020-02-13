@@ -5,3 +5,5 @@ Data from Kaggle, including 16 variables and 7834 observations. After data clean
 Variables considerated were: Neighborhood, Price, number_of_reviews_per_month, number_of_reviews, availability_365,  minimum_nights and calculated_host_listings_count.
 Files included: listings.xlsx, PrivateRooms.xlsx, reviews.csv.
 
+Neighborhoods- closer to downtown, closer to attractions, and crime level.
+
