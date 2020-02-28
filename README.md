@@ -8,7 +8,7 @@ This research aims to help tourists decide which neighborhood in San Francisco h
 data was obtained from Kaggle, including 16 variables and 7834 observations. After data cleaning there are 7 variables and 2064 abservations.
 Variables considerated were: Neighborhood, Price, reviews_per_month, reviews_total, availability_365,  minimum_nights and calculated_host_listings_count.
 
-Files included were: listings.xlsx, PrivateRooms.csv, PrivateRooms.xlsx, reviews.csv.
+Files included were: listings.xlsx, PrivateRooms.csv, PrivateRooms.xlsx, reviews.csv
 
 Gathering necessary information from listings.xlsx...
 
@@ -20,8 +20,10 @@ Boxplots were also created for minimum_nights, reviews_per_month, reviews_total,
 After closely observing those boxplots, outliers were removed together as well as NA values.
 Those boxplots now present a cleaner organization of the PrivateRooms.csv data.
 
+Data frames were created for each variable. A clean_data.csv file was created with a data frame including all variables after cleaning their boxplots and reorganizing the data in a way all observations will match.
 
-##MAKE NUMERICAL NEIBORHOODS, CATEGORICAL, 1-10, PUTTING THE SIMILARS TOGETHER. rUN A LINEAR REGRESSION MODEL ON IT.
+
+##MAKE NUMERICAL NEIBORHOODS, CATEGORICAL, 1-10, PUTTING THE SIMILARS TOGETHER. RUN A LINEAR REGRESSION MODEL ON IT.
 
 
 
