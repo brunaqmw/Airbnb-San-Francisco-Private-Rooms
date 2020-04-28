@@ -1,6 +1,6 @@
 # Airbnb-San-Francisco-Private-Rooms
 
-Which neighborhood in San Francisco offers tourists private rooms that fit their budge, is safe, is close to Downtown and attractions? 
+Which neighborhoods in San Francisco offer tourists private rooms that fit their budge, are safe, is close to Downtown and attractions? 
 
 Let's find out what varibles can help us discover which neighborhood in San Francisco has the best(according to considerations above) private rooms to rent!
 
