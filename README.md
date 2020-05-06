@@ -49,18 +49,24 @@ Further analysis will explain the price of those subsets when it comes to how sa
 PHASE 2 OF ANALYSIS:
 
 Subsets of neighborhoods were examined in regards to how safe they were. Afterwards, a numerical safe subset was created, subsetted into 5 different categories: (1-2)-highest safety, (3-4)- high safety, (5-6)- low safety, (7,8)- lower safety, and lastly (9,10)- lowest safety. Safety was based on the rate of annual crime, violent crimes and property theft reports for 2019.
+ADD MATRIX #1062
 
-Plots created:
+A geometric jitter plot, with level of safety(cat_sub) against safe subsets(safe_sub).
+ADD PLOT #709 and add explanation
 
-The first plot was a geometric jitter plot, with level of safety(cat_sub) against safe subsets(safe_sub).
-ADD PLOT #723 and add explanation
-
-A Lollipop plot was created, including the first neighborhood subset, which resulted in having subset  (2)- Marina(Mrn), North Beach(NrB), Russian Hill(RsH), with 77 private rooms having the highest price per subset, and the safe_sub. That same subset number (2) ended up being number (9) when it comes to safety. Meaning that, for the data in this plot, price does not depend on safety. In addition, a box plot of safe_sub against price was created. ADD PLOTS LINE#740, 768
-
+For further analysis of safe_sub and cat_sub, a Chi-Square test was conducted.
+#716 add analysis and explanation
 
 RESULT OF SECOND ANALYSIS:
 
-Above it can be seen that the box plot supports the evidence presented with the Lollipop plot, that safe_sub number (9) having the lowest safety, and the least amount of rooms, is the most expensive subset. Therefore, safety level of neighborhood subsets is not the main criteria involved when selecting which airbnb private room to rent in San Francisco.
+Above it can be seen that the Chi-Square test supports the evidence presented with the on the geometric jitter plot. 
+_safe_sub number (1-2) having the highest safety and 299 private rooms, but yet not being the considered the most famous of the subsets.
+_safe_sub number (9-10) having the lowest safety and 532 private rooms, and being considered to be one of the most famous subsets. 
+
+ The p-value obtained from Chi-Square is statistically significant, and we ignore the null hypothesis, and opt to stay with the alternative hypothesis:
+ H_a: Safe subsets containing the most famous neighborhoods, are not the most safe.
+ 
+ Therefore, safety level of neighborhood subsets is not the main criteria involved when selecting which airbnb private room to rent in San Francisco.
 
 
 PHASE 3 OF ANALYSIS:
@@ -69,12 +75,37 @@ How much does being close to attractions affect the price of private rooms?
 
 For phase number three of the analysis, the focus is on finding out which neighborhood subset is closer to famous attractions. And if whether or not the fact of being closer to those attractions changes the price of private rooms to rent. 
 
-The same subset of neighborhoods first created was used to create new subsets of neighborhoods close to attractions from (1-10). Which was then turned into a subset(cat_sub) where: (1-2) is nearest to famous attractions, (3-4) is nearer, (5-6) near, (7-8) further and (9-10) furthest from famous attractions. 
+The safe subset of neighborhoods first created was used to create new subsets of neighborhoods close to attractions from (1-10). Which was then turned into a subset(cat_sub) where: (1-2) is nearest to famous attractions, (3-4) is nearer, (5-6) near, (7-8) further and (9-10) furthest from famous attractions. 
+ADD MATRIX #1078
 
-Plots created to analyse safe_sub with proximity to attractions subset where: a geom_point and geom_jitter: ADD PLOTS LINE#961
+Plots created to analyse safe_sub with proximity to attractions subset where: a geom_point and geom_jitter: 
+ADD PLOTS LINE#918 and explain
 
-#Above shows safe_subs and how close they are to most famous attractions.
-# Subset of safe_sub (1) - Crocker Amazon, Ocean View and Outer Mission,  is further from famous attractions,  and safe_sub (9) - Marina, North Beach, Russian Hill is nearest to the most famous attractions. 
+A test to conduct non-parametric estimation was selected.
+Kernel regression is a nonparametric regression method that allows us to capture the underlying structure.
+ADD #1017 with explanation
+
+ADD #1109 data frame of attractions
+
+ADD #1173 w/explanation, #1189
+
+Wrapping up how proximity to famous attractions affects the price of private rooms:
+
+Chi-Square test of independence:
+Was conducted to find out if most of the neighbohood subsets closer to attractions are not safe.
+ADD TEST #1198 and explain
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
