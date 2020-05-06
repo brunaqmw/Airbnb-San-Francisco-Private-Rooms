@@ -36,7 +36,7 @@ Those neighborhoods were then turned numerical to run tests against other variab
 
 A barplot of “clean_sub” was created to analyze neighborhood subsets against price per private room. On this barplot it can observed that subset number 4(which includes: Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)), with 455 private rooms available has the greatest price change per room, with maximum price being over $400. Hence, after merging these neighborhoods together from decreased $250 price per night, per neighborhood, there’s an increase of $150 when considering subsets of neighborhoods.  ADD BARPLOT LINE#414
 
-A last data frame was created named last_df1. Containing all 2064 observations with 8 variables including neighborhood subsets and neighborhoods acronyms. With this data frame further analysis can be made. The first variables to be analyzed were Neigb_Sub and Price.
+Another data frame was created named last_df1. Containing all 2064 observations with 8 variables including neighborhood subsets and neighborhoods acronyms. With this data frame further analysis can be made. The first variables to be analyzed were Neigb_Sub and Price.
 ADD PLOTS LINE#517
 
 
@@ -50,7 +50,10 @@ PHASE 2 OF ANALYSIS:
 
 Subsets of neighborhoods were examined in regards to how safe they were. Afterwards, a numerical safe subset was created, subsetted into 5 different categories: (1-2)-highest safety, (3-4)- high safety, (5-6)- low safety, (7,8)- lower safety, and lastly (9,10)- lowest safety. Safety was based on the rate of annual crime, violent crimes and property theft reports for 2019.
 
-The first consisted of a geometric gitter(geom_jitter)  plot, with categorical(cat_sub) against safety subsets(safe_sub). ADD PLOT #723
+Plots created:
+
+The first plot was a geometric jitter plot, with level of safety(cat_sub) against safe subsets(safe_sub).
+ADD PLOT #723 and add explanation
 
 A Lollipop plot was created, including the first neighborhood subset, which resulted in having subset  (2)- Marina(Mrn), North Beach(NrB), Russian Hill(RsH), with 77 private rooms having the highest price per subset, and the safe_sub. That same subset number (2) ended up being number (9) when it comes to safety. Meaning that, for the data in this plot, price does not depend on safety. In addition, a box plot of safe_sub against price was created. ADD PLOTS LINE#740, 768
 
