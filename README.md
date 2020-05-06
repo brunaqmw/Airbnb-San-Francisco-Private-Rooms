@@ -28,16 +28,14 @@ Boxplots were also created for minimum_nights, reviews_per_month, reviews_total,
 After closely observing those boxplots, outliers were removed as well as NA values.
 Those boxplots now present a cleaner organization of the PrivateRooms.csv data.
 
-Data frames were created for each variable including neighborhood. TRY TO ADD DATAFRAME
-
  A cleaned1.csv file was created with a data frame including all variables after cleaning their boxplots and reorganizing the data in a way all observations would match. The 35 Neighborhoods were abbreviated to a three-letter acronym, and now we are left with 2064 observations. ADD BOXPLOT LINE#449-455
 
 Those neighborhoods were then turned numerical to run tests against other variables. Subsequently, stored in 10 categorical subsets. Those subsets were created based on proximity to neighborhoods, saved under clean_sub.csv.
 
-A barplot of “clean_sub” was created to analyze neighborhood subsets against price per private room. On this barplot it can observed that subset number 4(which includes: Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)), with 455 private rooms available has the greatest price change per room, with maximum price being over $400. Hence, after merging these neighborhoods together from decreased $250 price per night, per neighborhood, there’s an increase of $150 when considering subsets of neighborhoods.  ADD BARPLOT LINE#414
+A barplot of “clean_sub” was created to analyze neighborhood subsets against price per private room. On this barplot it can observed that subset number 4(which includes: Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)), with 455 private rooms available has the greatest price change per room, with maximum price being over $400. Hence, after merging these neighborhoods together from decreased $250 price per night, per neighborhood, there’s an increase of $150 when considering subsets of neighborhoods.  ADD BARPLOT LINE#419
 
 Another data frame was created named last_df1. Containing all 2064 observations with 8 variables including neighborhood subsets and neighborhoods acronyms. With this data frame further analysis can be made. The first variables to be analyzed were Neigb_Sub and Price.
-ADD PLOTS LINE#517
+ADD PLOTS LINE#510
 
 
 RESULT OF FIRST ANALYSIS:
@@ -52,7 +50,7 @@ Subsets of neighborhoods were examined in regards to how safe they were. Afterwa
 ADD MATRIX #1062
 
 A geometric jitter plot, with level of safety(cat_sub) against safe subsets(safe_sub).
-ADD PLOT #709 and add explanation
+ADD PLOT #717 and add explanation
 
 For further analysis of safe_sub and cat_sub, a Chi-Square test was conducted.
 #716 add analysis and explanation
@@ -76,16 +74,11 @@ How much does being close to attractions affect the price of private rooms?
 For phase number three of the analysis, the focus is on finding out which neighborhood subset is closer to famous attractions. And if whether or not the fact of being closer to those attractions changes the price of private rooms to rent. 
 
 The safe subset of neighborhoods first created was used to create new subsets of neighborhoods close to attractions from (1-10). Which was then turned into a subset(cat_sub) where: (1-2) is nearest to famous attractions, (3-4) is nearer, (5-6) near, (7-8) further and (9-10) furthest from famous attractions. 
-ADD MATRIX #1078
-
-Plots created to analyse safe_sub with proximity to attractions subset where: a geom_point and geom_jitter: 
-ADD PLOTS LINE#918 and explain
+ADD MATRIX #1022
 
 A test to conduct non-parametric estimation was selected.
 Kernel regression is a nonparametric regression method that allows us to capture the underlying structure.
-ADD #1017 with explanation
-
-ADD #1109 data frame of attractions
+ADD #927 with explanation
 
 ADD #1173 w/explanation, #1189
 
@@ -94,6 +87,17 @@ Wrapping up how proximity to famous attractions affects the price of private roo
 Chi-Square test of independence:
 Was conducted to find out if most of the neighbohood subsets closer to attractions are not safe.
 ADD TEST #1198 and explain
+
+Lastly, a Least Squares regression model was used to analyse price~safe_df1$fam_attr.
+ADD #1221 and explain
+
+
+RESULT OF THIRD ANALYSIS:
+
+Famous attraction subset is negatively related with price. When private room are expensive, the closer they are to famous attractions. The further they are from famous attractions, the cheaper the price for private rooms are.
+By using Chi-Square test of independence, we found that there is a relationship between neighborhood subsets close to attractions and safety.
+Ultimately, the Least Squares regression model showed that proximity to attractions affects the price of private rooms.
+Hence, after interpreting different plots and tests, the data can confirm that there is a relationship between safe neighborhoods close to attractions and how much their private rooms cost. The closer they are to famous attractions, the more expensive the private rooms will be.
 
 
 
