@@ -1,0 +1,900 @@
+---
+title: "AIRBNB-SF-PRIVATE-ROOMS-PROJECT"
+author: "Bruna Maringoli-Wells"
+date: "May 6, 2020"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+
+Which neighborhoods in San Francisco offer tourists private rooms that fit their budget, are safe (crime-wise), close to Downtown and attractions?
+
+Let's find out what variables can help us discover which neighborhoods in San Francisco have the best (according to considerations above) private rooms to rent!
+
+This research aims to help tourists decide where their ideal locality will be  in "The Golden City".
+
+
+
+#Phase 1 of analysis:
+
+
+The data was obtained from Kaggle, including 16 variables and 7833 observations. After data cleaning there are 7 variables and 2064 observations.
+Variables considered were: Neighborhood, Price, reviews_per_month, reviews_total, availability_365,  minimum_nights and calculated_host_listings_count.
+
+
+Files first included:
+
+
+Listings.xlsx- where all listings for Airbnbs in San Francisco are found. Including details like: number_id of listing, name, host_name, neighborhood, room_type, price, and many more interesting features.   
+
+
+PrivateRooms.csv- which includes all Airbnbs private rooms from listings. Including all details above.
+
+
+Reviews.csv-includes listing_id and date of reviews.
+
+
+
+Gathering necessary information from listings.xlsx.
+
+
+Here is the Listings data frame: 
+With 7833 observations of 16 variables 
+
+```{r, re, message=FALSE, include=FALSE}
+library(readxl)
+listings <- read_excel("C:/Users/Bruna/OneDrive/FINAL-PROJECT/listings.xlsx")
+View(listings)
+```
+
+```{r room_type, include=FALSE}
+dt=subset(listings, room_type == "Private room") 
+dt
+summary(dt)
+```
+
+There are 2885 private rooms. Private rooms' prices per night were decreased to $250.
+
+```{r room_type1, include=FALSE}
+summary(dt$room_type)
+```
+
+```{r room_type2, include=FALSE}
+plot(dt$price)
+boxplot(dt$price)
+```
+
+```{r room_type3, include=FALSE}
+y=dt$neighbourhood
+table(y)
+```
+
+```{r room_type4, include=FALSE}
+y1=barplot(table(y))
+y1
+```
+
+```{r room_type5, include=FALSE}
+write.csv(dt, 'PrivateRooms.csv')
+summary(dt)
+```
+
+```{r room_type6, include=FALSE}
+dt1 <- as.data.frame(summary(dt))
+dt1
+```
+
+```{r, re1, include=FALSE}
+library(glmnet)
+```
+
+```{r room_type7, include=FALSE}
+##Will show Var1, Var2, Freq on matrix. NA variables are shown
+data.matrix(dt1)
+```
+
+```{r room_type8, include=FALSE}
+##To remove NA variables from matrix
+na.omit(dt1)                        
+m <- as.matrix(dt1)          
+na.omit(m)
+summary(m)
+```
+
+```{r room_type9, include=FALSE}
+##2885 obs. of 7 variables. Down from 16 variables
+##including 6-neighbourhood, 10-price, 11-minimun_nights, 12-number_of_reviews
+##14-reviews_per_month, 15-calculated_host_listing_count, 16-availability_365
+dt2=dt[,c(6, 10, 11, 12, 14, 15, 16)]
+dt2
+```
+
+```{r room_type10, include=FALSE}
+summary(na.omit(dt2))
+```
+
+```{r room_type11, include=FALSE}
+##Trying to decrease the price of $8k. Got: $4K. NEED LESS
+dt3=dt2[-which.max(dt2$price),]
+dt3
+```
+
+```{r room_type12, include=FALSE}
+##dt4 to decrease price by using price<500. This will get it done to Max. 499
+dt4=dt3[dt3$price<500,]
+summary(dt4)
+```
+
+```{r room_type13, include=FALSE}
+## Boxplot has fewer outliers
+boxplot(dt4$price)
+```
+
+```{r room_type14, include=FALSE}
+##to remove outliers, it will also show the outliers. There are 141 outliers
+boxplot(dt4$price)$out
+```
+
+```{r room_type15, include=FALSE}
+##assigning outliers values into a vector. Result will appear on Global Environment
+outliers <- boxplot(dt4$price)$out
+##check results
+print(outliers)
+```
+
+```{r room_type16, include=FALSE}
+##now I can remove the rows containing outliers:
+dt4 <-dt4[-which(dt4$price %in% outliers),]
+```
+
+```{r}
+boxplot(dt4$price, col=(c("orange")), main="Price of Private-Rooms", xlab=" ", ylab="Prices")
+```
+
+Boxplots were also created for minimum_nights, reviews_per_month, reviews_total, calculated_host_listings_count and availability_365.
+After closely observing those boxplots, outliers were removed as well as NA values.
+Those boxplots now present a cleaner organization of the PrivateRooms.csv data.
+
+```{r bc, include=FALSE}
+##Creating boxplots for other 6 variables
+boxplot(dt4$minimum_nights)
+```
+
+```{r bc1, include=FALSE}
+##trying to decrease max nights  
+##decreased Max#of nights to 180.00 from 100,000,000
+dt5=dt4[dt4$minimum_nights<365,]
+```
+
+```{r bc2, include=FALSE}
+boxplot(dt5$minimum_nights) 
+```
+
+```{r bc3, include=FALSE}
+##Boxplot number_of_reviews
+##there were a max of 687 reviews
+boxplot(dt4$number_of_reviews)
+```
+
+```{r bc4, include=FALSE}
+##too many outliers, decreasing outliers:
+boxplot(dt4$number_of_reviews)$out
+```
+
+```{r bc5, include=FALSE}
+outliers <- boxplot(dt4$number_of_reviews)$out
+```
+
+```{r bc6, include=FALSE}
+##now I can remove the rows containing outliers:
+dt4 <-dt4[-which(dt4$number_of_reviews %in% outliers),]
+```
+
+```{r bc7, include=FALSE}
+##you will see the outliers are gone
+##now the boxplot has decreased number of reviews down to 200, from 700 including outliers
+boxplot(dt4$number_of_reviews)
+```
+
+```{r bc8, include=FALSE}
+##Boxplot for Reviews_per_month
+boxplot(dt4$reviews_per_month)
+```
+
+```{r, re2, include=FALSE}
+library(glmnet)
+```
+
+```{r bc9, include=FALSE}
+##Will show Var1, Var2, Freq on matrix. NA variables are shown
+data.matrix(dt4$reviews_per_month)   ##2503 obs
+```
+
+```{r bc10, include=FALSE}
+##To remove NA variables from matrix
+na.omit(dt4$reviews_per_month)  
+```
+
+```{r bc11, include=FALSE}
+##Boxplot for calculated_host_listings_count
+boxplot(dt4$calculated_host_listings_count)
+```
+
+```{r bc12, include=FALSE}
+##removing some outliers from calculated_host_listing_count
+boxplot(dt4$calculated_host_listings_count)$out
+```
+
+```{r bc13, include=FALSE}
+outliers <- boxplot(dt4$calculated_host_listings_count)$out
+```
+
+```{r bc14, include=FALSE}
+##now I can remove the rows containing outliers:
+dt4 <-dt4[-which(dt4$calculated_host_listings_count %in% outliers),]
+```
+
+```{r bc15, include=FALSE}
+##you will see the outliers are gone
+boxplot(dt4$calculated_host_listings_count)
+```
+
+```{r bc16, include=FALSE}
+##Boxplot availability_365
+boxplot(dt4$availability_365)
+```
+
+```{r bc17, include=FALSE}
+##Removing NA's from dt4$reviews_per_month, then outliers
+z=na.omit(dt4$reviews_per_month)
+z
+```
+
+```{r bc18, include=FALSE}
+#Will print all neighbourhoods and their availability
+summary(as.factor(dt4$neighbourhood))
+summary(dt4$neighbourhood)
+```
+
+```{r, re3, include=FALSE}
+library(knitr)
+```
+
+```{r bc19, include=FALSE}
+dt6=(data.frame(dt4))
+##dt6 contains 2064 obs. of 7, includes neighbourhoods
+```
+
+```{r bc20, include=FALSE}
+##Individual dataframes for other 6 variables not neighbourhood
+pri=(data.frame(dt4$price))
+
+mini=(data.frame(dt4$minimum_nights))
+
+numb=(data.frame(dt4$number_of_reviews))
+
+rev=(data.frame(dt4$reviews_per_month))
+
+calc=(data.frame(dt4$calculated_host_listings_count))
+
+avail=(data.frame(dt4$availability_365))
+```
+
+```{r bc21, include=FALSE}
+##Creating single dataframe for the 6 variables(not including neighbourhood)
+dt7=(data.frame(pri, mini, numb, rev, calc, avail))
+##2064 obs. of 6 variables
+```
+
+```{r bc22, include=FALSE}
+##Creating data frame of neighbourhood to check #of obs
+neig=(data.frame(dt4$neighbourhood))
+##2064 obs. of 1 variable
+```
+
+```{r nei, include=FALSE}
+neig$dt4.neighbourhood[1:2064]
+```
+
+```{r nei1, include=FALSE}
+ab=abbreviate(dt4$neighbourhood, 3, strict = TRUE)
+ab
+##On "ab" they are abbreviated but still contain non-abbreviated names
+## ab shows neighbourhoods not abbreaviated with there abbreviations
+```
+
+```{r nei2, include=FALSE}
+#creating data frame of "ab"
+ab1=(data.frame(ab))
+ab1
+```
+
+```{r nei3, include=FALSE}
+##Data frame of all observations including neighborhoods
+dt8=(data.frame(ab1, pri, mini, numb, rev, calc, avail))
+dt8
+```
+
+```{r nei4, include=FALSE}
+##Making ab1 convert to table format
+y=table(ab1)
+y
+barplot(y, main = "Neighborhoods-Listings", xlab = "Neighborhoods", ylab = "Listings", horiz=TRUE, las=1)
+```
+
+```{r nei5, include=FALSE}
+##Used to change the names on dt8 data frame
+names(dt8)=c("neigb1", "price", "nights", "review_total","review_month", "listing", "avail")
+names(dt8)
+```
+
+
+A cleaned1.csv file was created with a data frame including all variables after cleaning their boxplots and reorganizing the data in a way all observations would match. The 35 Neighborhoods were abbreviated to a three-letter acronym, and now we are left with 2064 observations. 
+
+
+
+```{r nei6, include=FALSE}
+write.csv(dt8, 'C:/Users/Bruna/OneDrive/FINAL-PROJECT/cleaned1.csv')
+```
+
+```{r, re6, message=FALSE, include=FALSE}
+library(readxl)
+cleaned1 <- read_excel("C:/Users/Bruna/OneDrive/FINAL-PROJECT/cleaned1.xlsx")
+```
+
+```{r nei7, include=FALSE}
+View(cleaned1)
+names(cleaned1)=c("index","neigb1", "price", "nights", "review_total","review_month", "listing", "avail")
+names(cleaned1)
+```
+
+
+```{r nei9, include=FALSE}
+myvars = names(cleaned1) %in% c("index")
+cleaned2a = cleaned1[!myvars]
+cleaned2a
+```
+
+```{r nei10, include=FALSE}
+write.csv(cleaned2a, 'C:/Users/Bruna/OneDrive/FINAL-PROJECT/cleaned2a.csv')
+```
+
+```{r, re7, message=FALSE, include=FALSE}
+library(readxl)
+cleaned2a <- read_excel("C:/Users/Bruna/OneDrive/FINAL-PROJECT/cleaned2a.xlsx")
+View(cleaned2a)
+```
+
+```{r nei11, include=FALSE}
+clean2a_neigb1=cleaned2a$neigb1
+clean2a_neigb1
+```
+
+```{r nei12, include=FALSE}
+write.csv(clean2a_neigb1, 'C:/Users/Bruna/OneDrive/FINAL-PROJECT/cleaned2a_neigb1.csv')
+```
+
+
+```{r, re8, message=FALSE, include=FALSE}
+library(readxl)
+cleaned2a_neigb1 <- read_excel("C:/Users/Bruna/OneDrive/FINAL-PROJECT/cleaned2a_neigb1.xlsx")
+```
+
+```{r nei13, include=FALSE}
+###Renaming clean2_neigb1
+clean = clean2a_neigb1
+clean
+```
+
+Those neighborhoods were then turned numerical to run tests against other variables. Subsequently, stored in 10 categorical subsets. Those subsets were created based on proximity to neighborhoods, saved under clean_sub.csv.
+
+
+MATRIX OF NEIGHBORHOOD SUBSETS:
+
+```{r nw, echo=FALSE}
+ns<- matrix(c("Financial District(Fnd), ChinaTown(Chn), Nob Hill(NbH)", "Marina(Mrn), North Beach(NrB), Russian Hill(RsH)", "Inner Richmond(InR), Outer Richmond(OtR), Seacliff(ScI), Golden Gate Park(GGP)", " Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)", "Pacific Heights(PcH), Presidio Heights(PrH), Western Addition(WsA)", "Downtown/Civic Center(D/C), South Of Market(SoM)", "Crocker Amazon(CrA), Ocean View(OcV), Outer Mission(OOO)", "Inner Sunset-(InS), Outer Sunset(OtS), West of Twin Peaks(WoTP), Twin Peaks(TwP), ParkSide(Prk)", "Noe Valley(NVI), Glen Park(GlP), Diamond Heights(DmH)", "Bay View(Byv), Visitation Valley(VsV), Excelsior(Exc), 
+Bernal Heights(BrH)"), nrow=10, byrow=TRUE, dimnames=list(Subsets=c(1,2,3,4,5,6,7,8,9,10), Based_on_Proximity=c("Neighborhoods")))
+ns
+```
+
+
+```{r, re9, message=FALSE, include=FALSE}
+library(readxl)
+neigb_2 <- read_excel("C:/Users/Bruna/OneDrive/FINAL-PROJECT/neigb_2.xlsx")
+View(neigb_2)
+```
+
+```{r nei14, include=FALSE}
+##Need to remove unnecessary column
+clean_sub = neigb_2
+clean_sub
+```
+
+```{r nei15, include=FALSE}
+##Changing the names of the columns of clean_sub
+names(clean_sub)=c("index","neigb2-sub")
+names(clean_sub)
+```
+
+```{r nei16, include=FALSE}
+##Creating barplot of clean_sub with prices
+j=clean_sub
+table(j)
+```
+
+A barplot of "clean_sub" was created to analyze neighborhood subsets against price per private room. On this barplot it can observed that subset number 4(which includes: Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)), with 455 private rooms available has the greatest price change per room, with maximum price being over $400. 
+Hence, after merging these neighborhoods together from decreased $250 price per night, per neighborhood, there's an increase of $150 when considering subsets of neighborhoods.  
+
+
+```{r}
+barplot(table(j), main = "Neighborhoods-Prices", xlab = "Prices", ylab = "Neighborhood-Subsets", horiz=TRUE, las=1, col="blue")
+```
+
+Barplot "Neighborhoods-Prices", shows how subset #4- Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA), with 455 private rooms available has the greatest price change per rooms, as it has the most rooms available.
+
+
+A boxplot was also created to show price variation of neighborhood subsets:
+
+```{r nei17, include=FALSE}
+boxplot(cleaned2a$price~cleaned2a$neigb1)
+dt9=cleaned2a$price~cleaned2a$neigb1
+boxplot(dt9)
+```
+
+```{r}
+boxplot(dt9, main = "Private_Rooms", xlab = "Neighborhoods", ylab = "Price",horiz=TRUE, las=1, col=c(5,3))
+```
+
+
+Above, is the boxplot of all neighborhoods and their acronym showing how they differ in price. 
+
+Another data frame was created named last_df1. Containing all 2064 observations with 8 variables including neighborhood subsets and neighborhoods acronyms. With this data frame further analysis can be made. 
+The first variables to be analyzed were Neigb_Sub and Price.
+
+```{r, re10, message=FALSE, include=FALSE}
+library(readxl)
+last_df1 <- read_excel("C:/Users/Bruna/OneDrive/FINAL-PROJECT/last_df1.xlsx")
+View(last_df1)
+```
+
+
+```{r nei18, include=FALSE}
+##Trying to change names 
+Neigb_Sub=last_df1$'neigb2-sub'
+Neigb_Sub
+```
+
+```{r nei19, include=FALSE}
+Price=last_df1$price
+Price
+```
+
+```{r, re4, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r nw1, echo=FALSE}
+gp2=ggplot(last_df1, aes(x=Neigb_Sub, y=Price))
+gp2 + geom_jitter(col= "purple")
+gp2 + geom_point(col="red")
+gp2 + geom_smooth(col="blue")
+gp2 + geom_violin(fill= "seagreen") +
+  coord_flip() +
+stat_summary(fun.y=mean, geom="point", shape=24, size=2, color="black", fill="black")
+```
+
+Above it can be noticed that:
+
+1st graph: neighborhood subset #4- Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA), has the most private rooms to rent, and with that information it can be explained how spread the points(prices) are do to the amount of rooms available.
+
+2nd graph: neighborhood subset #9- Noe Valley(NVI), Glen Park(GlP), Diamond Heights(DmH) with 110 private rooms available has just a few rooms that are over $200 per night stay.
+
+3rd graph: neighborhood subset #2- Marina(Mrn), North Beach(NrB), Russian Hill(RsH), has the highest price per subsets.
+
+4th graph: it can be observed that neighborhood subset #2- Marina(Mrn), North Beach(NrB), Russian Hill(RsH), has the highest mean value for prices of its 77 private rooms.
+
+
+A box plot was also created support claims made so far, about neighborhood subsets:
+
+```{r}
+gp5=boxplot(Price~Neigb_Sub, data=last_df1, col=(c("pink","purple")), main = "Prices per Neighborhood_Subset", xlab="Neigb_Sub", ylab="Price", las=1)
+```
+
+Boxplot above reinforces previous graphs showing how neighborhood subset 
+2- Marina(Mrn), North Beach(NrB), Russian Hill(RsH) is the most expensive subset for last_df1 dataframe. 
+
+
+
+#Result of first analysis:
+
+
+After analysing box plots, barplots, geom_jitter etc, for price against neighborhoods then price against neighborhood-subsets, results show that neighborhood subset 2- Marina(Mrn), North Beach(NrB), Russian Hill(RsH), with 77 private rooms has the highest price per subset. Perhaps, because it has the least amount of private rooms per subset?
+Further analysis will explain the price of those subsets when it comes to how safe they are, and how close they are to famous attractions. Let's find out!
+
+
+
+#Phase 2 of analysis:
+
+
+Subsets of neighborhoods were examined in regards to how safe they were. Afterwards, a numerical safe subset was created, subsetted into 5 different categories: (1-2)-highest safety, (3-4)- high safety, (5-6)- low safety, (7,8)- lower safety, and lastly (9,10)- lowest safety. Safety was based on the rate of annual crime, violent crimes and property theft reports for 2019.
+
+
+Neighborhood-Subsets subesetted from (1-10)
+1= Most Safe
+10= Not Safe
+
+MATRIX OF SAFE-NEIGHBORHOOD SUBSETS:
+
+```{r nw2, echo=FALSE}
+sns<- matrix(c("Crocker Amazon(CrA), Ocean View(OcV), Outer Mission(OOO)", "Inner Richmond(InR), Outer Richmond(OtR), Seacliff(ScI), Golden Gate Park(GGP)", "Noe Valley(NVI), Glen Park(GlP), Diamond Heights(DmH)", "Inner Sunset-(InS), Outer Sunset(OtS), West of Twin Peaks(WoTP), Twin Peaks(TwP), ParkSide(Prk)", "Downtown/Civic Center(D/C), South Of Market(SoM)", "Financial District(Fnd), ChinaTown(Chn), Nob Hill(NbH)", "Pacific Heights(PcH), Presidio Heights(PrH), Western                         Addition(WsA)", "Bay View(Byv), Visitation Valley(VsV), Excelsior(Exc), Bernal Heights(BrH)", "Marina(Mrn), North Beach(NrB), Russian Hill(RsH)", "Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)"), nrow=10, byrow=TRUE, dimnames=list(Safe_Subsets=c(1,2,3,4,5,6,7,8,9,10), Based_on_Crime_Reports=c("Neighborhoods")))
+sns
+```
+
+A geometric jitter plot, with level of safety(cat_sub) against safe subsets(safe_sub). 
+
+```{r, re11, message=FALSE, include=FALSE}
+library(readxl)
+safe_df <- read_excel("C:/Users/Bruna/OneDrive/FINAL-PROJECT/safe_df.xlsx")
+View(safe_df)
+```
+             
+```{r sc, include=FALSE}
+##Changing order of x-coor which are alphabetical, to what the data actually is
+
+foo = rep(0, nrow(safe_df)) 
+# set the positions where cat_sub == 'highest' to be 1 
+foo[with(safe_df, cat_sub == "highest")] = 1 
+foo[with(safe_df, cat_sub == "highest")] = 2 
+foo[with(safe_df, cat_sub == "high")] = 3 
+foo[with(safe_df, cat_sub == "high")] = 4 
+foo[with(safe_df, cat_sub == "low")] = 5
+foo[with(safe_df, cat_sub == "low")] = 6 
+foo[with(safe_df, cat_sub == "lower")] = 7 
+foo[with(safe_df, cat_sub == "lower")] = 8 
+foo[with(safe_df, cat_sub == "lowest")] = 9 
+foo[with(safe_df, cat_sub == "lowest")] = 10
+foo
+```
+
+```{r sc1, include=FALSE}
+## change safe_df£cat_sub to the reordered version and discard foo
+safe_df$cat_sub = with(safe_df, reorder(cat_sub, foo)) 
+rm(foo)
+```
+
+```{r, re5, include=FALSE}
+library(ggplot2)
+```
+
+```{r}
+sf4<-ggplot(safe_df, aes(x=cat_sub, y=safe_sub, color="green")) + geom_point()
+sf4 + geom_jitter(aes(colour = cat_sub))
+sf4
+```
+It can be observed that safe_subs (1-2) have the highest safety of all subsets. Those subsets are: #1: Crocker Amazon(CrA), Ocean View(OcV), Outer Mission(OOO), and #2: Inner Richmond(InR), Outer Richmond(OtR), Seacliff(ScI), Golden Gate Park(GGP). Subset #1 has the highest concentraction of safety in comparison to subset #2. While subsets (9-10) have the lowest safety, those are: #9: Marina(Mrn), North Beach(NrB), Russian Hill(RsH) and #10: Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA). Subset #10 has the lowest concentration of safety in comparison to subset #9.
+
+
+
+For further analysis of safe_sub and cat_sub, a Chi-Square test was conducted.
+
+#Chi-square test of independence
+
+Contingency table
+
+```{r}
+sfx0=table(safe_df$safe_sub, safe_df$cat_sub)
+sfx0
+```
+
+```{r}
+test0 <- chisq.test(table(safe_df$safe_sub, safe_df$cat_sub))
+test0
+```
+The claim thats on trial is the null hypothesis:
+
+H_o: There is no relationship between the popularity of neighborghood subsets and safety.
+
+H_a: There is a relationship between the popularity of neighborghood subsets and safety.
+
+Therefore, p-value is 2.2e-16 < 0.05, we reject the null hypothesis and accept the alternative hypothesis: There is a relationship between the popularity of neighborghood subsets and safety.
+
+
+#Result of second analysis:
+
+Above it can be seen that the Chi-Square test supports the evidence presented with the on the geometric jitter plot. 
+_safe_sub number (1-2) having the highest safety and 299 private rooms, but yet not being the considered the most famous of the subsets.
+_safe_sub number (9-10) having the lowest safety and 532 private rooms, and being considered to be one of the most famous subsets. 
+
+ The p-value obtained from Chi-Square is statistically significant, and we ignore the null hypothesis, and opt to stay with the alternative hypothesis:
+ H_a: There is a relationship between the popularity of neighborghood subsets and safety.
+ 
+ As observed above, the safest subset #1: Crocker Amazon(CrA), Ocean View(OcV), Outer Mission(OOO), and #2: Inner Richmond(InR), Outer Richmond(OtR), Seacliff(ScI), Golden Gate Park(GGP), is not as popular as the lowest safety subset #9: Marina(Mrn), North Beach(NrB), Russian Hill(RsH) and #10: Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA).
+Therefore, safety level of neighborhood subsets is not the main criteria involved when selecting which airbnb private room to rent in San Francisco.
+
+
+
+#Phase 3 of analysis:
+
+How much does being close to attractions affect the price of private rooms? 
+
+For phase number three of the analysis, the focus is on finding out which neighborhood subset is closer to famous attractions. And if whether or not the fact of being closer to those attractions changes the price of private rooms to rent. 
+
+The safe subset of neighborhoods first created was used to create new subsets of neighborhoods close to attractions from (1-10). Which was then turned into a subset(cat_sub) where: (1-2) is nearest to famous attractions, (3-4) is nearer, (5-6) near, (7-8) further and (9-10) furthest from famous attractions. 
+
+```{r, re12, message=FALSE, include=FALSE}
+library(readxl)
+safe_df1 <- read_excel("C:/Users/Bruna/OneDrive/FINAL-PROJECT/safe_df1.xlsx")
+View(safe_df1)
+```
+
+MATRIX OF SAFE-SUBSETS CLOSE TO ATTRACTIONS:
+
+```{r nw3, echo=FALSE}
+cla<- matrix(c("Marina(Mrn), North Beach(NrB), Russian Hill(RsH)", 
+               "Inner Richmond(InR), Outer Richmond(OtR), Seacliff(ScI), Golden Gate Park(GGP)", 
+               "Inner Sunset-(InS), Outer Sunset(OtS), West of Twin Peaks(WoTP), Twin Peaks(TwP), ParkSide(Prk)", 
+               "Financial District(Fnd), ChinaTown(Chn), Nob Hill(NbH)",
+               "Downtown/Civic Center(D/C), South Of Market(SoM)",
+               "Pacific Heights(PcH), Presidio Heights(PrH), Western                       Addition(WsA)",
+               "Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)",
+               "Crocker Amazon(CrA), Oceanview(OcV), Outer Mission(OOO)",
+               "Noe Valley(NVI), Glen Park(GlP), Diamond Heights(DmH)",
+"Bayview(Byv), Visitation Valley(VsV), Excelsior(Exc), Bernal Heights(BrH)"), nrow=10, byrow=TRUE, dimnames=list(Subsets=c(1,2,3,4,5,6,7,8,9,10), Based_on_Proximity_to_Attractions=c("Neighborhoods")))
+cla
+```
+
+
+A test to conduct non-parametric estimation was selected.
+Kernel regression is a nonparametric regression method that allows us to capture the underlying structure.
+
+```{r}
+Kreg3 = ksmooth(x=safe_df1$fam_attr,y=Price,kernel = "normal",bandwidth = 0.9) 
+plot(safe_df1$fam_attr,Price,pch=20) 
+lines(Kreg3, lwd=4, col="orange")
+```
+
+Famous attraction subset is positively related with price. The closest the subset is to famous attractions the most expensive the private rooms are. The furthest from famous attractions the cheaper the private rooms are. 
+
+```{r}
+cor(safe_df1$fam_attr, Price)
+```
+
+This correlation shows how the relationship between famous attractions and price is positive, when subset is close to famous attractions the more expensive it is. Price vs. famous attractions has a negative relationship, meaning that the far away the subset is from famous attractions, the cheaper the subset is.
+
+
+Plots were created for visualization of safe subsets when it comes to level of safety and proximity to famous attractions:
+
+```{r nw4, echo=FALSE, warning=FALSE}
+library(ggplot2)
+theme_set(theme_bw())  
+
+cp <- ggplot(safe_df1, aes(x=proximity, y=cat_sub)) + 
+  geom_point(aes(col=cat_sub, size=proximity)) + 
+  facet_wrap(~safe_sub, scales = "free") +
+  labs(subtitle="Proximity to Attractions vs Level of Safety", 
+       y="Proximity", 
+       x="Cat_sub", 
+       title="Plots of Safe Subsets", 
+       caption = "Source: safe_df1")
+cp
+```
+
+
+```{r nw5, echo=FALSE, warning=FALSE}
+cp1=ggplot(safe_df1, aes(x=proximity, y=cat_sub)) +
+ geom_point(aes(col=cat_sub, size=proximity)) +
+ geom_smooth(method="loess", se=F) + 
+ labs(y="Safety Level", 
+       x="Proximity", 
+       title="Proximity to Attractions vs. Levels of Safety of Subsets")
+cp1 
+```
+On scatterplot above, it can be seen that the highest safety neighborhood sub is further from famous attractions. Now, the lowest safety neighborhood sub is nearest to most famous attractions.
+
+
+
+DATA FRAME OF ATTRACTIONS:
+
+```{r nw6, echo=FALSE}
+attr <-(data.frame(Subsets=c(1,2,3,4,5,6,7,8,9,10),
+                   Level_of_Proximity=c("Nearest", "Nearest", "Nearer", "Nearer", "Near", "Near", "Further", "Further", "Furthest", "Furthest"), Proximity_to_Attractions_Sub=c("Marina(Mrn), North Beach(NrB), Russian Hill(RsH)", 
+               "Inner Richmond(InR), Outer Richmond(OtR), Seacliff(ScI), Golden Gate Park(GGP)", 
+               "Inner Sunset-(InS), Outer Sunset(OtS), West of Twin Peaks(WoTP), Twin Peaks(TwP), ParkSide(Prk)", 
+               "Financial District(Fnd), ChinaTown(Chn), Nob Hill(NbH)",
+               "Downtown/Civic Center(D/C), South Of Market(SoM)",
+               "Pacific Heights(PcH), Presidio Heights(PrH), Western                       Addition(WsA)",
+               "Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)",
+               "Crocker Amazon(CrA), Oceanview(OcV), Outer Mission(OOO)",
+               "Noe Valley(NVI), Glen Park(GlP), Diamond Heights(DmH)",
+"Bayview(Byv), Visitation Valley(VsV), Excelsior(Exc), Bernal Heights(BrH)"), Top5_Attractions=c("Fisherman's Wharf, Lombard Street,
+     Alcatraz Island, Pier 39, The Exploratorium", "Golden Gate Park, California Academy of Science, Golden Gate Bridge, Legion Of Honor, Presidio of San Francisco", "Golden Gate Park, San Francisco Botanical Garden, Califonia Academy of Sciences, Twin Peaks, Ocean Beach", "The Exploratorium, Dragon Gate, Transamerica Pyramid, Ferry Building, Cable Car", "Union Square, San Francisco Museum of Modern Arts, Bill Graham Civic Auditorium, Asian Art Museum, Oracle Park", "Presidio of San Francisco, Golden Gate Bridge, The Painted Ladies, The Palace of Fine Arts, Japan Town", "Golden Gate Park, The Painted Ladies, The Castro Theater, Mission Dolores Park, San Francisco Pride Parade", "Balboa Park, San Francisco Golf Club, Croker Amazon Playground, San Bruno Mountain State and County Park, Brooks Park", "Glen Park Festival, Mission Dolores Park, Glen Canyon Park, Twin Peaks, Bird & Beckett Books and Records", "Balboa Park, John McLaren Park, Bernal Heights Park, Speakeasy Brewery, Laughing Monk Brewing")))
+attr
+```
+
+Wrapping up how proximity to famous attractions affects the price of private rooms:
+
+
+#Chi-Square test of independence:
+
+Was conducted to find out if most of the neighbohood subsets closer to attractions are not safe.
+
+```{r sc2, include=FALSE}
+attr_sub <-table(safe_df1$safe_sub, safe_df1$proximity)
+attr_sub
+```
+
+```{r sc3, include=FALSE}
+safe_sub <-table(safe_df1$safe_sub, safe_df1$cat_sub)
+safe_sub
+```
+
+
+Contingency table
+
+```{r}
+sfx=table(safe_df1$proximity, safe_df1$cat_sub)
+sfx
+```
+
+Nearest to famous attractions subset safe_sub #9(Marina, North Beach, Russian Hill) has the lowest level of safety with 77 private rooms, safe_sub #1(Crocker Amazon, Ocean View, Outer Mission), has highest safety with 185 private rooms and is further from famous attractions.
+
+
+Running Chi-square test of independence
+
+```{r}
+test <- chisq.test(table(safe_df1$proximity, safe_df1$cat_sub))
+test
+```
+
+The claim thats on trial is the null hypothesis:
+
+H_o: There is no relationship between neighborhood subsets close to attractions and safety.
+
+H_a: There is a relationship between neighborhood subsets close to attractions and safety.
+
+Therefore, p-value is 2.2e-16 < 0.05, we reject the null hypothesis, and accept the alternative hypothesis: There is a relationship between neighborhood subsets close to attractions and safety.
+
+
+```{r}
+round(test$residuals, 3)
+```
+Residuals are positive for safe_subs, meaning they have a positive association between safety levels and proximity to attractions.
+
+
+Lastly, a Least Squares regression model was used to analyse price~safe_df1$fam_attr.
+
+
+```{r}
+library(ISLR)
+lm.fit=lm(Price~safe_df1$fam_attr, data = last_df1)
+lm.fit
+```
+
+```{r}
+summary(lm.fit)
+```
+
+The claim thats on trial is the null hypothesis:
+
+H_o: Proximity to famous attractions doesn't affect the prices of private rooms.
+
+H_a: Proximity to famous attractions affect the prices of private rooms.
+
+Above the p-value is 3.66e-07 < 0.05. 
+We reject the null hypothesis and can conclude that the interaction between the price of private rooms and proximity to famous attractions are important for this model.
+Adjusted R-squared is only 1%, it explains a very small variability of prices.
+F-statistic: is much larger than 1, we can reject the null hypothesis. 
+
+
+```{r sc4, include=FALSE}
+lm.fit$residuals
+```
+
+```{r}
+summary(lm.fit)
+plot(lm.fit)
+```
+
+
+
+The closest to 0 the better the fit. And the regression line of model is really close to 0
+
+4 graphs:
+
+1)Residuals$fitted_values
+Linearity assumption: the plot of the residuals against the fitted values form a horizontal line around 0, then we can say that the dependent variable is linearly related to the independent variable.
+
+2)Normal Q-Q
+#All the points dont fall exactly on diagonal line. Meaning that we have some deviation from normality here
+
+3)Scale-Location
+x= Fitted values
+y=sqr|Standardized residuals|
+
+4)Residuals vs Leverage
+x=Leverage
+y=Standardized residuals
+
+
+```{r}
+boxplot(Price~safe_df1$fam_attr, col=(c("red")), main="Price of Private Rooms close to Attractions", xlab="Famous Attractions", ylab="Prices")
+```
+
+Boxplot of "Price of Private Rooms close to Attractions" demonstrates how for example subset (1): Marina(Mrn), North Beach(NrB), Russian Hill(RsH), which contains 77 private rooms, has the largest variation in prices. The distribution of its boxplot is positively skewed, meaning that most of the prices are clustered around the left tail of the distribution, while the right tail of the distribution is longer. Thus, on the right tail we find less private rooms that are more expensive than those on the left tail. 
+Subset (10): Bayview(Byv), Visitation Valley(VsV), Excelsior(Exc), Bernal Heights(BrH), which contains 328 private rooms, contain whiskers observations that are distant from rest of data. The boxplot itself is symmetrically distributed, and mean price falls under $100. 
+Therefore, it can be said that subsets closer to famous attractions have fewer rooms that are much more expensive than subsets that are distant from famous attractions and have many more private rooms.
+
+
+
+#Result of third analysis:
+
+Famous attraction subset is negatively related with price. When private rooms are expensive, the closer they are to famous attractions. The further they are from famous attractions, the cheaper the price for private rooms are.
+By using Chi-Square test of independence, we found that there is a relationship between neighborhood subsets close to attractions and safety.
+Ultimately, the Least Squares regression model showed that proximity to attractions affects the price of private rooms.
+Hence, after interpreting different plots and tests, the data can confirm that there is a relationship between safe neighborhoods close to attractions and how much their private rooms cost. The closer they are to famous attractions, the more expensive the private rooms will be.
+
+
+
+#Conclusion:
+
+Results (from first created subset) before creating subsets of safety and attractions, showed how subset (2): Marina(Mrn), North Beach(NrB), Russian Hill(RsH), was the most expensive subset. 
+When it comes to safety, the least popular subsets have the highest safety. Like safe_sub (1): Crocker Amazon(CrA), Ocean View(OcV), Outer Mission(OOO), and (2): Inner Richmond(InR), Outer Richmond(OtR), Seacliff(ScI), Golden Gate Park(GGP). In comparison to the lowest safety subs like (9): Marina(Mrn), North Beach(NrB), Russian Hill(RsH) and (10): Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA), which contain the most popular, known neighborhoods in San Francisco.
+Now, when it comes to attractions, it is very clear that the subsets closer to famous attractions are the most expensive ones. The further they are from attractions, the cheapest they becomes.
+Consequently, it follows that safety is not the main criteria when selecting which neighborhood to stay. Being close to popular neighborhoods which involve being close to the most famous attractions, is far more important than safety criteria of neighborhood. 
+
+
+
+
+
+#Acknowledgements:
+
+Information about safety of neighborhoods can be found here:
+
+https://www.areavibes.com/san+francisco-ca
+https://trip101.com/article/safe-neighborhoods-in-san-francisco
+https://www.onlyinyourstate.com/northern-california/san-francisco/safest-san-francisco/
+https://trip101.com/article/safe-neighborhoods-in-san-francisco
+https://www.niche.com/places-to-live/search/safest-neighborhoods/m/san-francisco-metro-area/
+
+
+Information about neighborhood attractions can be found here:
+
+https://www.tripadvisor.com/Attractions-g60713-Activities-a_allAttractions.true-San_Francisco_California.html
+https://www.sftravel.com/article/top-20-attractions-san-francisco
+https://travel.usnews.com/San_Francisco_CA/Things_To_Do/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
