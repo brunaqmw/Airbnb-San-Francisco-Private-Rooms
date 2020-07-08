@@ -1,6 +1,6 @@
 ![image](https://user-images.githubusercontent.com/54724466/86974197-bb193500-c12a-11ea-8627-74118ff58984.png)
 
-<span style="font-size:larger;color:purple;"> AIRBNB SAN FRANCISCO PRIVATE ROOMS </span>
+<span style="color:purple;"> AIRBNB SAN FRANCISCO PRIVATE ROOMS </span>
 
 
 
