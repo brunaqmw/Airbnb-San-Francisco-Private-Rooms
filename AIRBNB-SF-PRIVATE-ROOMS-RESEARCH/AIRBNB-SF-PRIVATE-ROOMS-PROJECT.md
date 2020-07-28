@@ -33,10 +33,7 @@ Listings.xlsx- where all listings for Airbnbs in San Francisco are found. Includ
 
 PrivateRooms.csv- which includes all Airbnbs private rooms from listings. Including all details above.
 
-
 Reviews.csv-includes listing_id and date of reviews.
-
-
 
 Gathering necessary information from listings.xlsx.
 
@@ -516,7 +513,7 @@ DATA FRAME OF ATTRACTIONS:
 ## 9                                            Noe Valley(NVI), Glen Park(GlP), Diamond Heights(DmH)
 ## 10                       Bayview(Byv), Visitation Valley(VsV), Excelsior(Exc), Bernal Heights(BrH)
 ##                                                                                                         Top5_Attractions
-## 1                                   Fisherman's Wharf, Lombard Street,\n     Alcatraz Island, Pier 39, The Exploratorium
+## 1                                   Fisherman's Wharf, Lombard Street, Alcatraz Island, Pier 39, The Exploratorium
 ## 2        Golden Gate Park, California Academy of Science, Golden Gate Bridge, Legion Of Honor, Presidio of San Francisco
 ## 3               Golden Gate Park, San Francisco Botanical Garden, Califonia Academy of Sciences, Twin Peaks, Ocean Beach
 ## 4                                        The Exploratorium, Dragon Gate, Transamerica Pyramid, Ferry Building, Cable Car
