@@ -1,5 +1,5 @@
 ---
-title: "AIRBNB-SF-PRIVATE-ROOMS-PROJECT"
+title: "AIRBNB-SF-PRIVATE-ROOMS"
 author: "Bruna Maringoli-Wells"
 date: "May 6, 2020"
 output: 
