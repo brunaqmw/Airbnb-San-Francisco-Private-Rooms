@@ -199,7 +199,7 @@ MATRIX OF NEIGHBORHOOD SUBSETS:
 ##      7  "Crocker Amazon(CrA), Ocean View(OcV), Outer Mission(OOO)"                                       
 ##      8  "Inner Sunset-(InS), Outer Sunset(OtS), West of Twin Peaks(WoTP), Twin Peaks(TwP), ParkSide(Prk)"
 ##      9  "Noe Valley(NVI), Glen Park(GlP), Diamond Heights(DmH)"                                          
-##      10 "Bay View(Byv), Visitation Valley(VsV), Excelsior(Exc), \nBernal Heights(BrH)"
+##      10 "Bay View(Byv), Visitation Valley(VsV), Excelsior(Exc), Bernal Heights(BrH)"
 ```
 
 
@@ -320,7 +320,7 @@ MATRIX OF SAFE-NEIGHBORHOOD SUBSETS:
 ##           4  "Inner Sunset-(InS), Outer Sunset(OtS), West of Twin Peaks(WoTP), Twin Peaks(TwP), ParkSide(Prk)"
 ##           5  "Downtown/Civic Center(D/C), South Of Market(SoM)"                                               
 ##           6  "Financial District(Fnd), ChinaTown(Chn), Nob Hill(NbH)"                                         
-##           7  "Pacific Heights(PcH), Presidio Heights(PrH), Western                         Addition(WsA)"     
+##           7  "Pacific Heights(PcH), Presidio Heights(PrH), Western Addition(WsA)"     
 ##           8  "Bay View(Byv), Visitation Valley(VsV), Excelsior(Exc), Bernal Heights(BrH)"                     
 ##           9  "Marina(Mrn), North Beach(NrB), Russian Hill(RsH)"                                               
 ##           10 "Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)"
@@ -437,7 +437,7 @@ MATRIX OF SAFE-SUBSETS CLOSE TO ATTRACTIONS:
 ##      3  "Inner Sunset-(InS), Outer Sunset(OtS), West of Twin Peaks(WoTP), Twin Peaks(TwP), ParkSide(Prk)"
 ##      4  "Financial District(Fnd), ChinaTown(Chn), Nob Hill(NbH)"                                         
 ##      5  "Downtown/Civic Center(D/C), South Of Market(SoM)"                                               
-##      6  "Pacific Heights(PcH), Presidio Heights(PrH), Western                       Addition(WsA)"       
+##      6  "Pacific Heights(PcH), Presidio Heights(PrH), Western Addition(WsA)"       
 ##      7  "Mission(Mss), Potrero Hill(PtH), Castro Upper Market(C/M), Haight Ashbury(HgA)"                 
 ##      8  "Crocker Amazon(CrA), Oceanview(OcV), Outer Mission(OOO)"                                        
 ##      9  "Noe Valley(NVI), Glen Park(GlP), Diamond Heights(DmH)"                                          
