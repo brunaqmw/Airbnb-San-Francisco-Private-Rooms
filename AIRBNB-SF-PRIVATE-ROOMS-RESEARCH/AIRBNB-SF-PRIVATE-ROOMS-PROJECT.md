@@ -3,8 +3,6 @@ title: "AIRBNB-SF-PRIVATE-ROOMS"
 author: "Bruna Maringoli-Wells"
 date: "May 6, 2020"
 output: 
-  word_document: default
-  pdf_document: default
   html_document: 
     keep_md: yes
 ---
