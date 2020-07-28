@@ -524,6 +524,7 @@ DATA FRAME OF ATTRACTIONS:
 ## 9               Glen Park Festival, Mission Dolores Park, Glen Canyon Park, Twin Peaks, Bird & Beckett Books and Records
 ## 10                         Balboa Park, John McLaren Park, Bernal Heights Park, Speakeasy Brewery, Laughing Monk Brewing
 ```
+Above can be seen how subset-1 is nearest the most famous attractions, and what those famous attractions are.
 
 Wrapping up how proximity to famous attractions affects the price of private rooms:
 
