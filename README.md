@@ -29,6 +29,5 @@ Gathering necessary information from listings.xlsx...
 Here is the Listings data frame: With 7833 observations of 16 variables
 There are 2885 private rooms. Private rooms’ prices per night were decreased to $250.
 
-```
-boxplot(dt4$price, col=(c("orange")), main="Price of Private-Rooms", xlab=" ", ylab="Prices")
+```boxplot(dt4$price, col=(c("orange")), main="Price of Private-Rooms", xlab=" ", ylab="Prices")
 ```
