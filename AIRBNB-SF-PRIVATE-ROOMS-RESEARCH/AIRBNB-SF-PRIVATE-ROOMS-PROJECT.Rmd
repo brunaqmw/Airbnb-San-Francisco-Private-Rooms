@@ -2,8 +2,7 @@
 title: "AIRBNB-SF-PRIVATE-ROOMS-PROJECT"
 author: "Bruna Maringoli-Wells"
 date: "May 6, 2020"
-output: 
-  html_document: 
+output:  
     keep_md: yes
 ---
 
@@ -559,7 +558,7 @@ foo
 ```
 
 ```{r sc1, include=FALSE}
-## change safe_df£cat_sub to the reordered version and discard foo
+## change safe_dfÂ£cat_sub to the reordered version and discard foo
 safe_df$cat_sub = with(safe_df, reorder(cat_sub, foo)) 
 rm(foo)
 ```
